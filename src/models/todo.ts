@@ -5,9 +5,15 @@ interface ITodo {
     description: string;
 }
 
-interface todoModelInterface extends mongoose.Model<any>{
-    build(attr: ITodo): any
+interface TodoModelInterface extends mongoose.Model<any>{
+    build(attr: ITodo): TodoDoc
 }
+
+interface TodoDoc extends mongoose.Document {
+    title: string,
+    description: string
+}
+
 const todoSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -23,10 +29,6 @@ todoSchema.statics.build = (attr: ITodo) => {
     return new Todo(attr);
 }
 
-const Todo = mongoose.model('Todo', todoSchema);
-
-const build = (attr: ITodo) => {
-    return new Todo(attr);
-}
+const Todo = mongoose.model<TodoDoc, TodoModelInterface>('Todo', todoSchema);
 
 export { Todo };
